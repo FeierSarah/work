@@ -370,7 +370,7 @@ void testTime()
 		int random_num2 = rand() % 100;
 		float random = random_num1 + 0.01 * random_num2;
 		b[i] = random;
-		printf("%.2f ", b[i]);
+		//printf("%.2f ", b[i]);
 	}
 	printf("\n");
 
@@ -390,46 +390,46 @@ void testTime()
 	memcpy(b6, b, sizeof(float)* num);
 	memcpy(b7, b, sizeof(float)* num);
 
-	size_t start1 = clock();
-	InsertSort(b1, sizeof(b1) / sizeof(float));
-	ArrayPrint(b1, sizeof(b1) / sizeof(float));
-	size_t end1 = clock();
+	clock_t start1, end1, start2, end2, start3, end3, start4, end4, start5, end5, start6, end6, start7, end7;
+	start1 = clock();
+	InsertSort(b1, num); 
+	end1 = clock();
 	double time1 = ((double)end1 - (double)start1) / CLOCKS_PER_SEC;
 	printf("插入排序运行时间：%.3lf s\n", time1);
 
-	size_t start2 = clock();
-	ShellSort(b2, sizeof(b2) / sizeof(float));
-	size_t end2 = clock();
+	start2 = clock();
+	ShellSort(b2, num);
+	end2 = clock();
 	double time2 = ((double)end2 - (double)start2) / CLOCKS_PER_SEC;
 	printf("希尔排序运行时间：%.3lf s\n", time2);
 
-	size_t start3 = clock();
-	SelectSort(b3, sizeof(b3) / sizeof(float));
-	size_t end3 = clock();
+	start3 = clock();
+	SelectSort(b3, num);
+	end3 = clock();
 	double time3 = ((double)end3 - (double)start3) / CLOCKS_PER_SEC;
 	printf("选择排序运行时间：%.3lf s\n", time3);
 
-	size_t start4 = clock();
-	HeapSort(b4, sizeof(b4) / sizeof(float));
-	size_t end4 = clock();
+	start4 = clock();
+	HeapSort(b4, num);
+	end4 = clock();
 	double time4 = ((double)end4 - (double)start4) / CLOCKS_PER_SEC;
 	printf("堆排序运行时间：%.3lf s\n", time4);
 
-	size_t start5 = clock();
-	BubbleSort(b5, sizeof(b5) / sizeof(float));
-	size_t end5 = clock();
+	start5 = clock();
+	BubbleSort(b5, num);
+	end5 = clock();
 	double time5 = ((double)end5 - (double)start5) / CLOCKS_PER_SEC;
 	printf("冒泡排序运行时间：%.3lf s\n", time5);
 
-	size_t start6 = clock();
-	QuickSort(b6, 0, sizeof(b6) / sizeof(float)-1);
-	size_t end6 = clock();
+	start6 = clock();
+	QuickSort(b6, 0, num);
+	end6 = clock();
 	double time6 = ((double)end6 - (double)start6) / CLOCKS_PER_SEC;
 	printf("快速排序运行时间：%.3lf s\n", time6);
 
-	size_t start7 = clock();
-	MergeSort(b7, 0, sizeof(b7) / sizeof(float)-1);
-	size_t end7 = clock();
+	start7 = clock();
+	MergeSort(b7, 0, num);
+	end7 = clock();
 	double time7 = ((double)end7 - (double)start7) / CLOCKS_PER_SEC;
 	printf("合并排序运行时间：%.3lf s\n", time7);
 }
