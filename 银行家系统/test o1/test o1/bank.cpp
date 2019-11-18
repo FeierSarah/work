@@ -258,7 +258,7 @@ void banker() {//银行家算法
 void menu() {	//菜单函数
 	int code;
 	while (1) {
-		cout << "请输入指令" << endl <<
+		cout << endl << "请输入指令" << endl <<
 			"1.初始化" << endl <<
 			"2.显示矩阵" << endl <<
 			"3.判断安全性" << endl <<
