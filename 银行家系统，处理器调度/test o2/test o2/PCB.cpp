@@ -80,6 +80,12 @@ void menu()
 				time[array[0]] -= 1;
 				//比较更新后的优先级，找出下一个运行进程
 				cout << "之后进程运行为：";
+				//分情况考虑，如果有进程时间为0，更新状态和Count,并把优先级更新为一个足够小的值
+				if (time[array[0]] == 0)
+				{
+					state[array[0]] = 'E';
+					prio[array[0]] = -100;//把优先级更新为一个足够小的值
+				}
 				if (prio[array[0]] <= prio[array[1]])
 				{
 					cout << name[array[1]] << endl;
@@ -87,12 +93,6 @@ void menu()
 				else
 				{
 					cout << name[array[0]] << endl;
-				}
-				//分情况考虑，如果有进程时间为0，更新状态和Count,并把优先级更新为一个足够小的值
-				if (time[array[0]] == 0)
-				{
-					state[array[0]] = 'E';
-					prio[array[0]] = -100;//把优先级更新为一个足够小的值
 				}
 			}
 			else
