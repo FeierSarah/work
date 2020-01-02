@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <queue>
 #include <assert.h>
 #include <ctime>
 using namespace std;
@@ -19,8 +20,10 @@ int max(int m, int n)
 
 void bag1(int n, int num)
 {
-	for (int i = 0; i < n; i++) {
-		for (int j = 1; j <= num; j++) {
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 1; j <= num; j++) 
+		{
 			if (j < weight[i])
 			{
 				dp[i][j] = dp[i - 1][j];
@@ -55,9 +58,71 @@ void bag2(int n, int num)
 
 }
 
-void bag3(int n, int num)
+typedef struct treenode
 {
-
+	int weight;
+	int value;
+	int level;
+	int flag;
+}treenode;
+queue<struct treenode> que;
+int enQueue(int w, int v, int level, int flag, int n, int* bestvalue)
+{
+	treenode node;
+	node.weight = w;
+	node.value = v;
+	node.level = level;
+	node.flag = flag;
+	if (level == n)
+	{
+		if (node.value > *bestvalue)
+		{
+			*bestvalue = node.value;
+		}
+		return 0;
+	}
+	else
+	{
+		que.push(node);
+	}
+}
+//w为重量数组，v为价值数组，n为物品个数，c为背包容量，bestValue为全局最大价值
+int bbfifoknap(int n, int num, int* bestValue)
+{
+	//初始化结点
+	int i = 1;
+	treenode tag, livenode;
+	livenode.weight = 0;
+	livenode.value = 0;
+	livenode.level = 1;
+	livenode.flag = 0;//初始为0
+	tag.weight = -1;
+	tag.value = 0;
+	tag.level = 0;
+	tag.flag = 0;//初始为0
+	que.push(tag);
+	while (1)
+	{
+		if (livenode.weight + weight[i - 1] <= num)
+		{
+			enQueue(livenode.weight + weight[i - 1], livenode.value + value[i - 1], i, 1, n, bestValue);
+		}
+		enQueue(livenode.weight, livenode.value, i, 0, n, bestValue);
+		livenode = que.front();
+		que.pop();
+		if (livenode.weight == -1)
+		{
+			if (que.empty() == 1)
+			{
+				break;
+			}
+			livenode = que.front();
+			que.pop();
+			que.push(tag);
+			i++;
+		}
+	}
+	return 0;
 }
 
 void test()
