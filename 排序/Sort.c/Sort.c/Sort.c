@@ -207,49 +207,6 @@ int PartSort(float* a, int left, int right)
 	return left;
 }
 
-//挖坑法
-int PartSort2(float* a, int left, int right)
-{
-	assert(a);
-	int mid = getMid(a, left, right);
-	Swap(&a[mid], &a[left]);
-
-	float key = a[left];
-	while (left < right)
-	{
-		while (left < right && a[right] >= key)
-			--right;
-		a[left] = a[right];
-		while (left < right && a[right] <= key)
-			++left;
-		a[right] = a[left];
-	}
-	a[left] = key;
-	return left;
-}
-
-//前后指针法
-int PartSort3(float* a, int left, int right)
-{
-	assert(a);
-	int mid = getMid(a, left, right);
-	Swap(&a[mid], &a[left]);
-
-	float key = a[left];
-	int prev = left; //最后一个小于key的位置
-	int cur = left + 1;//下一个小于key的位置
-	//如果下一个小于key的位置与上一个小于key的位置不连续
-	//说明中间有大于key的值，进行交换，大的往后移动，小的往前移动
-	while (left <= right)
-	{
-		if (a[cur] < key && ++prev != cur)
-			Swap(&a[prev], &a[cur]);
-		++cur;
-	}
-	Swap(&a[left], &a[prev]);
-	return left;
-}
-
 //递归写法，非递归写法要用栈
 void QuickSort(float* a, int left, int right)
 {
@@ -272,7 +229,7 @@ void QuickSort(float* a, int left, int right)
 //时间：O(N * logN)
 //空间：T(N)
 //稳定性：稳定
-void _MergeSort(int* a, int left, int right, int* tmp)
+void _MergeSort(float* a, int left, int right, float* tmp)
 {
 	assert(a);
 	//区间只剩一个元素，无需分解和归并
@@ -306,10 +263,10 @@ void _MergeSort(int* a, int left, int right, int* tmp)
 	}
 }
 
-void MergeSort(int* a, int n)
+void MergeSort(float* a, int n)
 {
 	assert(a);
-	int *tmp = (int*)malloc(n * sizeof(int));
+	float *tmp = (float*)malloc(n * sizeof(int));
 	_MergeSort(a, 0, n - 1, tmp);
 	free(tmp);
 }
@@ -324,119 +281,94 @@ void ArrayPrint(float* a, int n)
 	printf("\n");
 }
 
-void testSort()
-{
-	float a[] = { 10.123, 2.123, 3.123, 8.123, 9.123, 7.123, 6.123, 1.123, 5.123, 4.123 };
-	printf("原数组为：  ");
-	ArrayPrint(a, sizeof(a) / sizeof(float));
-
-	InsertSort(a, sizeof(a) / sizeof(float));
-	printf("插入排序后为：  ");
-	ArrayPrint(a, sizeof(a) / sizeof(float));
-
-	ShellSort(a, sizeof(a) / sizeof(float));
-	printf("希尔排序后为：  ");
-	ArrayPrint(a, sizeof(a) / sizeof(float));
-
-	SelectSort(a, sizeof(a) / sizeof(float));
-	printf("选择排序后为：  ");
-	ArrayPrint(a, sizeof(a) / sizeof(float));
-
-	HeapSort(a, sizeof(a) / sizeof(float));
-	printf("堆排序后为：    ");
-	ArrayPrint(a, sizeof(a) / sizeof(float));
-
-	BubbleSort(a, sizeof(a) / sizeof(float));
-	printf("冒泡排序后为：  ");
-	ArrayPrint(a, sizeof(a) / sizeof(float));
-
-	QuickSort(a, 0, sizeof(a) / sizeof(float) - 1);
-	printf("快速排序后为：  ");
-	ArrayPrint(a, sizeof(a) / sizeof(float));
-
-	MergeSort(a, 0, sizeof(a) / sizeof(float) - 1);
-	printf("合并排序后为：  ");
-	ArrayPrint(a, sizeof(a) / sizeof(float));
-}
-
 void testTime()
 {
+	int i = 20;
+	double time1 = 0, time2 = 0, time3 = 0, time4 = 0, time5 = 0, time6 = 0, time7 = 0;
 	int num;
 	scanf("%d", &num);
-	float* b = (float*)malloc(num * sizeof(float));
-	for (int i = 0; i < num; i++)
+	while (i--)
 	{
-		int random_num1 = rand();
-		int random_num2 = rand() % 100;
-		float random = random_num1 + 0.01 * random_num2;
-		b[i] = random;
-		//printf("%.2f ", b[i]);
+		float* b = (float*)malloc(num * sizeof(float));
+		for (int i = 0; i < num; i++)
+		{
+			int random_num1 = rand();
+			int random_num2 = rand() % 100;
+			float random = random_num1 + 0.01 * random_num2;
+			b[i] = random;
+			//printf("%.2f ", b[i]);
+		}
+
+		float* b1 = (float*)malloc(num * sizeof(float));
+		float* b2 = (float*)malloc(num * sizeof(float));
+		float* b3 = (float*)malloc(num * sizeof(float));
+		float* b4 = (float*)malloc(num * sizeof(float));
+		float* b5 = (float*)malloc(num * sizeof(float));
+		float* b6 = (float*)malloc(num * sizeof(float));
+		float* b7 = (float*)malloc(num * sizeof(float));
+
+		memcpy(b1, b, sizeof(float)* num);
+		memcpy(b2, b, sizeof(float)* num);
+		memcpy(b3, b, sizeof(float)* num);
+		memcpy(b4, b, sizeof(float)* num);
+		memcpy(b5, b, sizeof(float)* num);
+		memcpy(b6, b, sizeof(float)* num);
+		memcpy(b7, b, sizeof(float)* num);
+
+		clock_t start1, end1, start2, end2, start3, end3, start4, end4, start5, end5, start6, end6, start7, end7;
+		start1 = clock();
+		InsertSort(b1, num);
+		end1 = clock();
+		time1 += (((double)end1 - (double)start1) / CLOCKS_PER_SEC);
+
+		start2 = clock();
+		ShellSort(b2, num);
+		end2 = clock();
+		time2 += (((double)end2 - (double)start2) / CLOCKS_PER_SEC);
+
+		start3 = clock();
+		SelectSort(b3, num);
+		end3 = clock();
+		time3 += (((double)end3 - (double)start3) / CLOCKS_PER_SEC);
+
+		start4 = clock();
+		HeapSort(b4, num);
+		end4 = clock();
+		time4 += (((double)end4 - (double)start4) / CLOCKS_PER_SEC);
+
+		start5 = clock();
+		BubbleSort(b5, num);
+		end5 = clock();
+		time5 += (((double)end5 - (double)start5) / CLOCKS_PER_SEC);
+
+		start6 = clock();
+		QuickSort(b6, 0, num);
+		end6 = clock();
+		time6 += (((double)end6 - (double)start6) / CLOCKS_PER_SEC);
+
+		start7 = clock();
+		MergeSort(b7, num);
+		end7 = clock();
+		time7 += (((double)end7 - (double)start7) / CLOCKS_PER_SEC);
 	}
-	printf("\n");
-
-	float* b1 = (float*)malloc(num * sizeof(float));
-	float* b2 = (float*)malloc(num * sizeof(float));
-	float* b3 = (float*)malloc(num * sizeof(float));
-	float* b4 = (float*)malloc(num * sizeof(float));
-	float* b5 = (float*)malloc(num * sizeof(float));
-	float* b6 = (float*)malloc(num * sizeof(float));
-	float* b7 = (float*)malloc(num * sizeof(float));
-
-	memcpy(b1, b, sizeof(float)* num);
-	memcpy(b2, b, sizeof(float)* num);
-	memcpy(b3, b, sizeof(float)* num);
-	memcpy(b4, b, sizeof(float)* num);
-	memcpy(b5, b, sizeof(float)* num);
-	memcpy(b6, b, sizeof(float)* num);
-	memcpy(b7, b, sizeof(float)* num);
-
-	clock_t start1, end1, start2, end2, start3, end3, start4, end4, start5, end5, start6, end6, start7, end7;
-	start1 = clock();
-	InsertSort(b1, num); 
-	end1 = clock();
-	double time1 = ((double)end1 - (double)start1) / CLOCKS_PER_SEC;
-	printf("插入排序运行时间：%.3lf s\n", time1);
-
-	start2 = clock();
-	ShellSort(b2, num);
-	end2 = clock();
-	double time2 = ((double)end2 - (double)start2) / CLOCKS_PER_SEC;
-	printf("希尔排序运行时间：%.3lf s\n", time2);
-
-	start3 = clock();
-	SelectSort(b3, num);
-	end3 = clock();
-	double time3 = ((double)end3 - (double)start3) / CLOCKS_PER_SEC;
-	printf("选择排序运行时间：%.3lf s\n", time3);
-
-	start4 = clock();
-	HeapSort(b4, num);
-	end4 = clock();
-	double time4 = ((double)end4 - (double)start4) / CLOCKS_PER_SEC;
-	printf("堆排序运行时间：%.3lf s\n", time4);
-
-	start5 = clock();
-	BubbleSort(b5, num);
-	end5 = clock();
-	double time5 = ((double)end5 - (double)start5) / CLOCKS_PER_SEC;
-	printf("冒泡排序运行时间：%.3lf s\n", time5);
-
-	start6 = clock();
-	QuickSort(b6, 0, num);
-	end6 = clock();
-	double time6 = ((double)end6 - (double)start6) / CLOCKS_PER_SEC;
-	printf("快速排序运行时间：%.3lf s\n", time6);
-
-	start7 = clock();
-	MergeSort(b7, 0, num);
-	end7 = clock();
-	double time7 = ((double)end7 - (double)start7) / CLOCKS_PER_SEC;
-	printf("合并排序运行时间：%.3lf s\n", time7);
+	double ave1 = time1 * 50000;
+	double ave2 = time2 * 50000;
+	double ave3 = time3 * 50000;
+	double ave4 = time4 * 50000;
+	double ave5 = time5 * 50000;
+	double ave6 = time6 * 50000;
+	double ave7 = time7 * 50000;
+	printf("插入排序运行时间：%.1lf us\n", ave1);
+	printf("希尔排序运行时间：%.1lf us\n", ave2);
+	printf("选择排序运行时间：%.1lf us\n", ave3);
+	printf("堆排序运行时间：%.1lf us\n", ave4);
+	printf("冒泡排序运行时间：%.1lf us\n", ave5);
+	printf("快速排序运行时间：%.1lf us\n", ave6);
+	printf("合并排序运行时间：%.1lf us\n", ave7);
 }
 
 int main()
 {
-	testSort();
 	testTime();
 	return 0;
 }
