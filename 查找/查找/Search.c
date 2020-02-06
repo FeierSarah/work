@@ -117,51 +117,58 @@ PBSTnode BinaryTreeSearch(double* a, double x, int length, PBSTnode root)
 	return -1;
 }
 
-/*红黑树*/
-
 void testTime()
 {
 	int num;
+	int k = 20;
+	double time1 = 0, time2 = 0, time3 = 0;
 	scanf("%d", &num);
-	double* b = (double*)malloc(num * sizeof(double));
-	for (int i = 0; i < num; i++)
+	while (k--)
 	{
-		int random_num1 = rand();
-		int random_num2 = rand() % 100;
-		double random = random_num1 + 0.01 * random_num2;
-		b[i] = random;
-		printf("%.2f ", b[i]);
+		double* b = (double*)malloc(num * sizeof(double));
+		for (int i = 0; i < num; i++)
+		{
+			int random_num1 = rand();
+			int random_num2 = rand() % 100;
+			double random = random_num1 + 0.01 * random_num2;
+			b[i] = random;
+			/*printf("%.2f ", b[i]);*/
+		}
+		/*printf("\n");*/
+
+		double* b1 = (double*)malloc(num * sizeof(double));
+		double* b2 = (double*)malloc(num * sizeof(double));
+		double* b3 = (double*)malloc(num * sizeof(double));
+
+
+		memcpy(b1, b, sizeof(double)* num);
+		memcpy(b2, b, sizeof(double)* num);
+		memcpy(b3, b, sizeof(double)* num);
+
+		clock_t start1, end1, start2, end2, start3, end3;
+		start1 = clock();
+		printf("%d", _Search(b1, 999.99, num));
+		end1 = clock();
+		time1 += ((double)end1 - (double)start1);
+		
+		start2 = clock();
+		printf("%d", BinarySearch(b2, 999.99, num));
+		end2 = clock();
+		time2 += ((double)end2 - (double)start2);
+		
+		PBSTnode root = NULL;
+		start3 = clock();
+		printf("%d", BinaryTreeSearch(b3, 999.99, num, root));
+		end3 = clock();
+		time3 += ((double)end3 - (double)start3);
 	}
-	printf("\n");
+	double ave1 = time1 * 50;
+	double ave2 = time2 * 50;
+	double ave3 = time3 * 50;
+	printf("顺序查找运行时间：%.1lf us\n", ave1);
+	printf("二分查找运行时间：%.1lf us\n", ave2);
+	printf("二叉树查找运行时间：%.1lf us\n", ave3);
 
-	double* b1 = (double*)malloc(num * sizeof(double));
-	double* b2 = (double*)malloc(num * sizeof(double));
-	double* b3 = (double*)malloc(num * sizeof(double));
-	
-
-	memcpy(b1, b, sizeof(double)* num);
-	memcpy(b2, b, sizeof(double)* num);
-	memcpy(b3, b, sizeof(double)* num);
-
-	clock_t start1, end1, start2, end2, start3, end3;
-	start1 = clock();
-	printf("%d\n", _Search(b1, b[99999], num));
-	end1 = clock();
-	double time1 = ((double)end1 - (double)start1) / CLOCKS_PER_SEC;
-	printf("顺序查找运行时间：%.3lf s\n", time1);
-
-	start2 = clock();
-	printf("%d\n", BinarySearch(b2, b[99999], num));
-	end2 = clock();
-	double time2 = ((double)end2 - (double)start2) / CLOCKS_PER_SEC;
-	printf("二分查找运行时间：%.3lf s\n", time2);
-
-	PBSTnode root = NULL;
-	start3 = clock();
-	printf("%d\n", BinaryTreeSearch(b3, b[99999], num, root));
-	end3 = clock();
-	double time3 = ((double)end3 - (double)start3) / CLOCKS_PER_SEC;
-	printf("二叉树查找运行时间：%.3lf s\n", time3);
 }
 
 int main()
